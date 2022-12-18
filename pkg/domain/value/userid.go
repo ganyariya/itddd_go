@@ -3,16 +3,19 @@ package value
 import (
 	"fmt"
 	"regexp"
+
+	"github.com/google/uuid"
 )
 
-const UserIdFormat = "^[0-9a-zA-Z]{40}$"
+const UserIdFormat = "^[0-9a-zA-Z-]{36}$"
 
 type UserId struct {
 	Id string
 }
 
-func NewUserId(id string) (UserId, error) {
-	u := UserId{id}
+func NewUserId() (UserId, error) {
+	uuid, _ := uuid.NewUUID()
+	u := UserId{Id: uuid.String()}
 	return u, u.Validate()
 }
 

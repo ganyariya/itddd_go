@@ -24,7 +24,7 @@ func NewUserCreateInteractor(userRepo irepository.IUserRepository, userServiece 
 }
 
 func (u *UserCreateInteractor) Handle(inputData *input.UserCreateInputData) (*output.UserCreateOutputData, error) {
-	userId, err := value.NewUserId(inputData.UserId)
+	userId, err := value.NewUserId()
 	if err != nil {
 		return nil, err
 	}
