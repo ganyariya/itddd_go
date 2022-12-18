@@ -3,9 +3,9 @@ package interactor_test
 import (
 	"testing"
 
+	"github.com/ganyariya/itddd_go/pkg/application/interactor"
 	"github.com/ganyariya/itddd_go/pkg/boundary/input"
 	"github.com/ganyariya/itddd_go/pkg/domain/entity"
-	"github.com/ganyariya/itddd_go/pkg/domain/interactor"
 	"github.com/ganyariya/itddd_go/pkg/domain/service"
 	"github.com/ganyariya/itddd_go/pkg/domain/value"
 	"github.com/ganyariya/itddd_go/pkg/infrastructure/stub"
