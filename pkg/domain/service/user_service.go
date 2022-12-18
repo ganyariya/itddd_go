@@ -5,6 +5,10 @@ import (
 	"github.com/ganyariya/itddd_go/pkg/domain/entity"
 )
 
+/*
+ドメイン内で Entity 単体にもたせられない処理を ドメインサービスが担当する
+ドメインの世界と知識を表現するものであり　解決するものがアプリケーションサービス
+*/
 type UserService struct {
 	userRepository irepository.IUserRepository
 }
