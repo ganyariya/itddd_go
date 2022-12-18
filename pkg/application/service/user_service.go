@@ -17,15 +17,15 @@ import (
 */
 type UserApplicationService struct {
 	userRepository irepository.IUserRepository
-	userService    service.UserService
+	userService    *service.UserService
 }
 
-func NewUserApplicationService(userRepo irepository.IUserRepository, userService service.UserService) *UserApplicationService {
+func NewUserApplicationService(userRepo irepository.IUserRepository, userService *service.UserService) *UserApplicationService {
 	return &UserApplicationService{userRepository: userRepo, userService: userService}
 }
 
-func (uas *UserApplicationService) Register(userIdStr string, name string) (*dto.UserDTO, error) {
-	userId, err := value.NewUserIdByIdString(userIdStr)
+func (uas *UserApplicationService) Register(name string) (*dto.UserDTO, error) {
+	userId, err := value.NewUserId()
 	if err != nil {
 		return nil, err
 	}
@@ -82,4 +82,16 @@ func (uas *UserApplicationService) Delete(command *command.UserDeleteCommand) er
 
 	uas.userRepository.Delete(user)
 	return nil
+}
+
+func (uas *UserApplicationService) GetAll() ([]*dto.UserDTO, error) {
+	userDtos := []*dto.UserDTO{}
+	users, err := uas.userRepository.FindAll()
+	if err != nil {
+		return nil, err
+	}
+	for _, user := range users {
+		userDtos = append(userDtos, dto.NewUserDTOByUser(user))
+	}
+	return userDtos, nil
 }
