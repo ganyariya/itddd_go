@@ -17,6 +17,9 @@ func NewUserService(userRepo irepository.IUserRepository) *UserService {
 	return &UserService{userRepository: userRepo}
 }
 
+/*
+重複を許さないのは「ドメインのルール」のため ApplicationService でなく DomainService。
+*/
 func (u *UserService) Exists(user *entity.User) bool {
 	ret, _ := u.userRepository.Find(user.Id)
 	return ret != nil
