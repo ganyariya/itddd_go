@@ -8,4 +8,6 @@ import (
 type IUserRepository interface {
 	Save(*entity.User) error
 	Find(value.UserId) (*entity.User, error)
+	FindByName(name string) (*entity.User, error)
+	Delete(*entity.User)
 }

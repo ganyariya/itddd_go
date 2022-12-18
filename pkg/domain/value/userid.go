@@ -18,6 +18,10 @@ func NewUserId() (UserId, error) {
 	u := UserId{Id: uuid.String()}
 	return u, u.Validate()
 }
+func NewUserIdByIdString(userId string) (UserId, error) {
+	u := UserId{Id: userId}
+	return u, u.Validate()
+}
 
 func (u UserId) Validate() error {
 	matched, err := regexp.MatchString(UserIdFormat, u.Id)
