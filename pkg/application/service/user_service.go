@@ -83,3 +83,15 @@ func (uas *UserApplicationService) Delete(command *command.UserDeleteCommand) er
 	uas.userRepository.Delete(user)
 	return nil
 }
+
+func (uas *UserApplicationService) GetAll() ([]*dto.UserDTO, error) {
+	userDtos := []*dto.UserDTO{}
+	users, err := uas.userRepository.FindAll()
+	if err != nil {
+		return nil, err
+	}
+	for _, user := range users {
+		userDtos = append(userDtos, dto.NewUserDTOByUser(user))
+	}
+	return userDtos, nil
+}
