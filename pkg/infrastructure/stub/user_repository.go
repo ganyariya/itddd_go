@@ -16,6 +16,12 @@ func NewUserStubRepository(users []*entity.User) *UserStubRepository {
 }
 
 func (u *UserStubRepository) Save(user *entity.User) error {
+	for i := range u.users {
+		if u.users[i].Id == user.Id {
+			u.users[i] = user
+			return nil
+		}
+	}
 	u.users = append(u.users, user)
 	return nil
 }

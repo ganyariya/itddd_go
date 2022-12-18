@@ -3,6 +3,7 @@ package service
 import (
 	"fmt"
 
+	"github.com/ganyariya/itddd_go/pkg/application/command"
 	"github.com/ganyariya/itddd_go/pkg/boundary/dto"
 	"github.com/ganyariya/itddd_go/pkg/boundary/irepository"
 	"github.com/ganyariya/itddd_go/pkg/domain/entity"
@@ -48,4 +49,37 @@ func (uas *UserApplicationService) Get(userIdStr string) (*dto.UserDTO, error) {
 		return nil, err
 	}
 	return dto.NewUserDTOByUser(user), nil
+}
+
+func (uas *UserApplicationService) Update(command *command.UserUpdateCommand) (*dto.UserDTO, error) {
+	userId, err := value.NewUserIdByIdString(command.Id)
+	if err != nil {
+		return nil, err
+	}
+
+	user, err := uas.userRepository.Find(userId)
+	if err != nil {
+		return nil, err
+	}
+
+	if command.Name != nil {
+		user.Name = *command.Name
+	}
+	err = uas.userRepository.Save(user)
+	return dto.NewUserDTOByUser(user), err
+}
+
+func (uas *UserApplicationService) Delete(command *command.UserDeleteCommand) error {
+	userId, err := value.NewUserIdByIdString(command.Id)
+	if err != nil {
+		return err
+	}
+
+	user, err := uas.userRepository.Find(userId)
+	if err != nil {
+		return err
+	}
+
+	uas.userRepository.Delete(user)
+	return nil
 }
