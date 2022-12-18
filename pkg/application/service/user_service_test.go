@@ -5,9 +5,7 @@ import (
 
 	"github.com/ganyariya/itddd_go/pkg/application/command"
 	"github.com/ganyariya/itddd_go/pkg/application/service"
-	"github.com/ganyariya/itddd_go/pkg/domain/entity"
 	dService "github.com/ganyariya/itddd_go/pkg/domain/service"
-	"github.com/ganyariya/itddd_go/pkg/domain/value"
 	"github.com/ganyariya/itddd_go/pkg/infrastructure/stub"
 	"github.com/stretchr/testify/assert"
 )
@@ -21,38 +19,29 @@ func TestUserService(t *testing.T) {
 		{Name: "ganyariya2", ChangeName: "cake2"},
 	}
 
-	userRepository := stub.NewUserStubRepository([]*entity.User{})
+	userRepository := stub.NewUserStubRepository()
 	userApplicationService := service.NewUserApplicationService(
 		userRepository,
-		*dService.NewUserService(userRepository),
+		dService.NewUserService(userRepository),
 	)
 	for _, tt := range tests {
-		userId, err := value.NewUserId()
-		assert.NoError(t, err)
-
-		user, err := userApplicationService.Register(userId.Id, tt.Name)
+		user, err := userApplicationService.Register(tt.Name)
 		assert.NoError(t, err)
 		assert.Equal(t, tt.Name, user.Name)
-		assert.Equal(t, userId.Id, user.Id)
 
-		user, err = userApplicationService.Get(userId.Id)
+		user, err = userApplicationService.Get(user.Id)
 		assert.NoError(t, err)
 		assert.Equal(t, tt.Name, user.Name)
-		assert.Equal(t, userId.Id, user.Id)
 
 		user, err = userApplicationService.Update(command.NewUserUpdateCommand(user.Id, &tt.ChangeName))
 		assert.NoError(t, err)
 		assert.Equal(t, tt.ChangeName, user.Name)
 
-		// すでに登録済みのためエラー
-		_, err = userApplicationService.Register(userId.Id, tt.Name)
-		assert.Error(t, err)
-
 		err = userApplicationService.Delete(command.NewUserDeleteCommand(user.Id))
 		assert.NoError(t, err)
 
 		// 削除済み
-		_, err = userApplicationService.Get(userId.Id)
+		_, err = userApplicationService.Get(user.Id)
 		assert.Error(t, err)
 	}
 }

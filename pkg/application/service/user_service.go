@@ -17,15 +17,15 @@ import (
 */
 type UserApplicationService struct {
 	userRepository irepository.IUserRepository
-	userService    service.UserService
+	userService    *service.UserService
 }
 
-func NewUserApplicationService(userRepo irepository.IUserRepository, userService service.UserService) *UserApplicationService {
+func NewUserApplicationService(userRepo irepository.IUserRepository, userService *service.UserService) *UserApplicationService {
 	return &UserApplicationService{userRepository: userRepo, userService: userService}
 }
 
-func (uas *UserApplicationService) Register(userIdStr string, name string) (*dto.UserDTO, error) {
-	userId, err := value.NewUserIdByIdString(userIdStr)
+func (uas *UserApplicationService) Register(name string) (*dto.UserDTO, error) {
+	userId, err := value.NewUserId()
 	if err != nil {
 		return nil, err
 	}
