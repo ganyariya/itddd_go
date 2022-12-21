@@ -1,6 +1,10 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+
+	"github.com/ganyariya/itddd_go/pkg/application/command"
+)
 
 func main() {
 	fmt.Print("Input your name: ")
@@ -9,7 +13,7 @@ func main() {
 	fmt.Scan(&name)
 
 	userAppService := Initialize()
-	userDto, err := userAppService.Register(name)
+	userDto, err := userAppService.Register(command.NewUserRegisterCommand(name))
 	if err != nil {
 		fmt.Println(err.Error())
 		return

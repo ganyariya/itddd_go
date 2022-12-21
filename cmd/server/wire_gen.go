@@ -8,6 +8,7 @@ package main
 
 import (
 	"github.com/ganyariya/itddd_go/pkg/application/service"
+	"github.com/ganyariya/itddd_go/pkg/domain/factory"
 	service2 "github.com/ganyariya/itddd_go/pkg/domain/service"
 	"github.com/ganyariya/itddd_go/pkg/infrastructure/stub"
 )
@@ -17,6 +18,7 @@ import (
 func Initialize() *service.UserApplicationService {
 	iUserRepository := stub.NewUserStubRepository()
 	userService := service2.NewUserService(iUserRepository)
-	userApplicationService := service.NewUserApplicationService(iUserRepository, userService)
+	iUserFactory := factory.NewUserFactory()
+	userApplicationService := service.NewUserApplicationService(iUserRepository, userService, iUserFactory)
 	return userApplicationService
 }

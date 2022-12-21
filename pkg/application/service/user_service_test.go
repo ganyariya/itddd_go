@@ -5,6 +5,7 @@ import (
 
 	"github.com/ganyariya/itddd_go/pkg/application/command"
 	"github.com/ganyariya/itddd_go/pkg/application/service"
+	"github.com/ganyariya/itddd_go/pkg/domain/factory"
 	dService "github.com/ganyariya/itddd_go/pkg/domain/service"
 	"github.com/ganyariya/itddd_go/pkg/infrastructure/stub"
 	"github.com/stretchr/testify/assert"
@@ -23,13 +24,14 @@ func TestUserService(t *testing.T) {
 	userApplicationService := service.NewUserApplicationService(
 		userRepository,
 		dService.NewUserService(userRepository),
+		factory.NewUserFactory(),
 	)
 	for _, tt := range tests {
-		user, err := userApplicationService.Register(tt.Name)
+		user, err := userApplicationService.Register(command.NewUserRegisterCommand(tt.Name))
 		assert.NoError(t, err)
 		assert.Equal(t, tt.Name, user.Name)
 
-		user, err = userApplicationService.Get(user.Id)
+		user, err = userApplicationService.Get(command.NewUserGetCommand(user.Id))
 		assert.NoError(t, err)
 		assert.Equal(t, tt.Name, user.Name)
 
@@ -41,7 +43,7 @@ func TestUserService(t *testing.T) {
 		assert.NoError(t, err)
 
 		// 削除済み
-		_, err = userApplicationService.Get(user.Id)
+		_, err = userApplicationService.Get(command.NewUserGetCommand(user.Id))
 		assert.Error(t, err)
 	}
 }
