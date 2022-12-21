@@ -12,6 +12,22 @@ func NewUserUpdateCommand(Id string, Name *string) *UserUpdateCommand {
 	return &UserUpdateCommand{Id: Id, Name: Name}
 }
 
+type UserRegisterCommand struct {
+	Name string
+}
+
+func NewUserRegisterCommand(Name string) *UserRegisterCommand {
+	return &UserRegisterCommand{Name: Name}
+}
+
+type UserGetCommand struct {
+	Id string
+}
+
+func NewUserGetCommand(Id string) *UserGetCommand {
+	return &UserGetCommand{Id: Id}
+}
+
 type UserDeleteCommand struct {
 	Id string
 }

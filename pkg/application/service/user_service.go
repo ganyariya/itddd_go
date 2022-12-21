@@ -6,7 +6,7 @@ import (
 	"github.com/ganyariya/itddd_go/pkg/application/command"
 	"github.com/ganyariya/itddd_go/pkg/boundary/dto"
 	"github.com/ganyariya/itddd_go/pkg/boundary/irepository"
-	"github.com/ganyariya/itddd_go/pkg/domain/entity"
+	"github.com/ganyariya/itddd_go/pkg/domain/factory"
 	"github.com/ganyariya/itddd_go/pkg/domain/service"
 	"github.com/ganyariya/itddd_go/pkg/domain/value"
 )
@@ -18,18 +18,18 @@ import (
 type UserApplicationService struct {
 	userRepository irepository.IUserRepository
 	userService    *service.UserService
+	userFactory    factory.IUserFactory
 }
 
-func NewUserApplicationService(userRepo irepository.IUserRepository, userService *service.UserService) *UserApplicationService {
-	return &UserApplicationService{userRepository: userRepo, userService: userService}
+func NewUserApplicationService(userRepo irepository.IUserRepository, userService *service.UserService, userFactory factory.IUserFactory) *UserApplicationService {
+	return &UserApplicationService{userRepository: userRepo, userService: userService, userFactory: userFactory}
 }
 
-func (uas *UserApplicationService) Register(name string) (*dto.UserDTO, error) {
-	userId, err := value.NewUserId()
+func (uas *UserApplicationService) Register(command *command.UserRegisterCommand) (*dto.UserDTO, error) {
+	user, err := uas.userFactory.Create(command.Name)
 	if err != nil {
 		return nil, err
 	}
-	user := entity.NewUser(userId, name)
 	if uas.userService.Exists(user) {
 		return nil, fmt.Errorf("exists")
 	}
@@ -38,8 +38,8 @@ func (uas *UserApplicationService) Register(name string) (*dto.UserDTO, error) {
 	return dto.NewUserDTOByUser(user), nil
 }
 
-func (uas *UserApplicationService) Get(userIdStr string) (*dto.UserDTO, error) {
-	userId, err := value.NewUserIdByIdString(userIdStr)
+func (uas *UserApplicationService) Get(command *command.UserGetCommand) (*dto.UserDTO, error) {
+	userId, err := value.NewUserIdByIdString(command.Id)
 	if err != nil {
 		return nil, err
 	}

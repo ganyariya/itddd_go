@@ -14,7 +14,7 @@ func RegisterHandler(w http.ResponseWriter, r *http.Request) {
 	values := r.URL.Query()
 	name := values.Get("name")
 
-	user, err := userAppService.Register(name)
+	user, err := userAppService.Register(command.NewUserRegisterCommand(name))
 	if err != nil {
 		fmt.Fprintf(w, "error: %s", err.Error())
 	} else {
@@ -31,7 +31,7 @@ func GetHandler(w http.ResponseWriter, r *http.Request) {
 	values := r.URL.Query()
 	uid := values.Get("uid")
 
-	user, err := userAppService.Get(uid)
+	user, err := userAppService.Get(command.NewUserGetCommand(uid))
 	if err != nil {
 		fmt.Fprintf(w, "error: %s", err.Error())
 	} else {
