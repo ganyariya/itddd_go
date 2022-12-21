@@ -13,6 +13,9 @@ type IUserFactory interface {
 User の生成を担当する
 （採番処理などを行う場合など、難しい複雑な処理を行う場合
 ファクトリにインスタンス生成を依頼する）
+
+Domain の世界に閉じさせたいが `IUserRepository` を使うことになってしまう
+Factory ならびに Domain Service は Boundary とのやり取りも行うことになりそう
 */
 type UserFactory struct {
 }
