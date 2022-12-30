@@ -73,7 +73,10 @@ func (cas *CircleApplicationService) Join(command *command.CircleJoinCommand) (*
 		return nil, err
 	}
 
-	circle.JoinUser(userId)
+	err = circle.JoinUser(userId)
+	if err != nil {
+		return nil, err
+	}
 
 	cas.circleRepository.Save(circle)
 	return dto.NewCircleDTOByCircle(circle), nil
