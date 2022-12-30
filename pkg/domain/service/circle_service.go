@@ -13,7 +13,7 @@ func NewCircleService(circleRepository irepository.ICircleRepository) *CircleSer
 	return &CircleService{circleRepository: circleRepository}
 }
 
-func (cs *CircleService) Exists(circle entity.Circle) bool {
+func (cs *CircleService) Exists(circle *entity.Circle) bool {
 	d, _ := cs.circleRepository.FindByCircleName(circle.Name)
 	return d != nil
 }
