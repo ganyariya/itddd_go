@@ -53,3 +53,28 @@ func (cas *CircleApplicationService) Register(command command.CircleRegisterComm
 	cas.circleRepository.Save(circle)
 	return dto.NewCircleDTOByCircle(circle), nil
 }
+
+func (cas *CircleApplicationService) Join(command *command.CircleJoinCommand) (*dto.CircleDTO, error) {
+	userId, err := value.NewUserIdByIdString(command.UserId)
+	if err != nil {
+		return nil, err
+	}
+	_, err = cas.userRepository.Find(userId)
+	if err != nil {
+		return nil, err
+	}
+
+	circleId, err := value.NewCircleIdByString(command.CircleId)
+	if err != nil {
+		return nil, err
+	}
+	circle, err := cas.circleRepository.FindByCircleId(circleId)
+	if err != nil {
+		return nil, err
+	}
+
+	circle.JoinUser(userId)
+
+	cas.circleRepository.Save(circle)
+	return dto.NewCircleDTOByCircle(circle), nil
+}

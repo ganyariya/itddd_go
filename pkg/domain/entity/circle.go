@@ -17,3 +17,7 @@ func NewCircle(Id value.CircleId, Name value.CircleName, OwnerId value.UserId, M
 		MemberIds: MemberIds,
 	}
 }
+
+func (c *Circle) JoinUser(userId value.UserId) {
+	c.MemberIds = append(c.MemberIds, userId)
+}

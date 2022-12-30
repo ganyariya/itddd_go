@@ -11,3 +11,15 @@ func NewCircleRegisterCommand(UserId string, CircleName string) *CircleRegisterC
 		CircleName: CircleName,
 	}
 }
+
+type CircleJoinCommand struct {
+	UserId   string
+	CircleId string
+}
+
+func NewCircleJoinCommand(UserId string, CircleId string) *CircleJoinCommand {
+	return &CircleJoinCommand{
+		UserId:   UserId,
+		CircleId: CircleId,
+	}
+}

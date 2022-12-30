@@ -13,10 +13,11 @@ import (
 
 func TestCircleService(t *testing.T) {
 	tests := []struct {
-		UserName   string
-		CircleName string
+		UserName     string
+		CircleName   string
+		JoinUserName string
 	}{
-		{UserName: "ganyariya", CircleName: "tama"},
+		{UserName: "ganyariya", CircleName: "tama", JoinUserName: "himari"},
 	}
 
 	userRepository := stub.NewUserStubRepository()
@@ -41,5 +42,12 @@ func TestCircleService(t *testing.T) {
 		assert.NoError(t, err)
 		assert.Equal(t, tt.CircleName, circle.Name)
 		assert.Equal(t, user.Id, circle.OwnerId)
+
+		joinUser, err := userApplicationService.Register(command.NewUserRegisterCommand(tt.JoinUserName))
+		assert.NoError(t, err)
+
+		circle, err = circleApplicationService.Join(command.NewCircleJoinCommand(joinUser.Id, circle.Id))
+		assert.NoError(t, err)
+		assert.Contains(t, circle.MemberIds, joinUser.Id)
 	}
 }
