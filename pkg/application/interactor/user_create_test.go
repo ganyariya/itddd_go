@@ -14,7 +14,7 @@ func TestUserCreate(t *testing.T) {
 	stubRepo := stub.NewUserStubRepository()
 	service := service.NewUserService(stubRepo)
 	interactor := interactor.NewUserCreateInteractor(stubRepo, service)
-	inputData := input.NewUserCreateInputData("ganyariya")
+	inputData := input.NewUserCreateInputData("ganyariya", false)
 
 	outputData, err := interactor.Handle(inputData)
 	assert.NoError(t, err)

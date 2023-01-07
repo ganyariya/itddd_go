@@ -1,8 +1,6 @@
 package entity
 
 import (
-	"fmt"
-
 	"github.com/ganyariya/itddd_go/pkg/domain/value"
 )
 
@@ -24,16 +22,14 @@ func NewCircle(Id value.CircleId, Name value.CircleName, OwnerId value.UserId, M
 	}
 }
 
-func (c *Circle) countUsers() int {
+func (c *Circle) CountUsers() int {
 	return 1 + len(c.MemberIds)
 }
-func (c *Circle) isFull() bool {
-	return c.countUsers() >= CircleMaxMemberNum
+func (c *Circle) IsFull(UpperBound int) bool {
+	return c.CountUsers() >= UpperBound
 }
+
 func (c *Circle) JoinUser(userId value.UserId) error {
-	if c.isFull() {
-		return fmt.Errorf("already full")
-	}
 	c.MemberIds = append(c.MemberIds, userId)
 	return nil
 }

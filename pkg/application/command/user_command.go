@@ -13,11 +13,12 @@ func NewUserUpdateCommand(Id string, Name *string) *UserUpdateCommand {
 }
 
 type UserRegisterCommand struct {
-	Name string
+	Name      string
+	IsPremium bool
 }
 
-func NewUserRegisterCommand(Name string) *UserRegisterCommand {
-	return &UserRegisterCommand{Name: Name}
+func NewUserRegisterCommand(Name string, IsPremium bool) *UserRegisterCommand {
+	return &UserRegisterCommand{Name: Name, IsPremium: IsPremium}
 }
 
 type UserGetCommand struct {

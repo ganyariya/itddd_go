@@ -28,7 +28,7 @@ func (u *UserCreateInteractor) Handle(inputData *input.UserCreateInputData) (*ou
 	if err != nil {
 		return nil, err
 	}
-	user := entity.NewUser(userId, inputData.UserName)
+	user := entity.NewUser(userId, inputData.UserName, inputData.IsPremium)
 
 	if u.userService.Exists(user) {
 		return nil, fmt.Errorf("already user exists")

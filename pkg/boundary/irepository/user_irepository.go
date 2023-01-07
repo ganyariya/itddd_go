@@ -9,6 +9,7 @@ type IUserRepository interface {
 	Save(*entity.User) error
 	Find(value.UserId) (*entity.User, error)
 	FindByName(name string) (*entity.User, error)
+	FindByIds([]value.UserId) ([]*entity.User, error)
 	FindAll() ([]*entity.User, error)
 	Delete(*entity.User)
 }

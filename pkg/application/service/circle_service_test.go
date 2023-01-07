@@ -35,7 +35,7 @@ func TestCircleService(t *testing.T) {
 	)
 
 	for _, tt := range tests {
-		user, err := userApplicationService.Register(command.NewUserRegisterCommand(tt.UserName))
+		user, err := userApplicationService.Register(command.NewUserRegisterCommand(tt.UserName, false))
 		assert.NoError(t, err)
 
 		circle, err := circleApplicationService.Register(*command.NewCircleRegisterCommand(user.Id, tt.CircleName))
@@ -43,7 +43,7 @@ func TestCircleService(t *testing.T) {
 		assert.Equal(t, tt.CircleName, circle.Name)
 		assert.Equal(t, user.Id, circle.OwnerId)
 
-		joinUser, err := userApplicationService.Register(command.NewUserRegisterCommand(tt.JoinUserName))
+		joinUser, err := userApplicationService.Register(command.NewUserRegisterCommand(tt.JoinUserName, false))
 		assert.NoError(t, err)
 
 		circle, err = circleApplicationService.Join(command.NewCircleJoinCommand(joinUser.Id, circle.Id))
