@@ -14,7 +14,7 @@ func RegisterHandler(w http.ResponseWriter, r *http.Request) {
 	values := r.URL.Query()
 	name := values.Get("name")
 
-	user, err := userAppService.Register(command.NewUserRegisterCommand(name))
+	user, err := userAppService.Register(command.NewUserRegisterCommand(name, false))
 	if err != nil {
 		fmt.Fprintf(w, "error: %s", err.Error())
 	} else {

@@ -26,7 +26,7 @@ func NewUserApplicationService(userRepo irepository.IUserRepository, userService
 }
 
 func (uas *UserApplicationService) Register(command *command.UserRegisterCommand) (*dto.UserDTO, error) {
-	user, err := uas.userFactory.Create(command.Name)
+	user, err := uas.userFactory.Create(command.Name, command.IsPremium)
 	if err != nil {
 		return nil, err
 	}

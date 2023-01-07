@@ -13,7 +13,7 @@ func main() {
 	fmt.Scan(&name)
 
 	userAppService := Initialize()
-	userDto, err := userAppService.Register(command.NewUserRegisterCommand(name))
+	userDto, err := userAppService.Register(command.NewUserRegisterCommand(name, false))
 	if err != nil {
 		fmt.Println(err.Error())
 		return

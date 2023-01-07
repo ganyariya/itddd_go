@@ -27,7 +27,7 @@ func TestUserService(t *testing.T) {
 		factory.NewUserFactory(),
 	)
 	for _, tt := range tests {
-		user, err := userApplicationService.Register(command.NewUserRegisterCommand(tt.Name))
+		user, err := userApplicationService.Register(command.NewUserRegisterCommand(tt.Name, false))
 		assert.NoError(t, err)
 		assert.Equal(t, tt.Name, user.Name)
 

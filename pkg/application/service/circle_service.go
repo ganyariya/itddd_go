@@ -6,8 +6,10 @@ import (
 	"github.com/ganyariya/itddd_go/pkg/application/command"
 	"github.com/ganyariya/itddd_go/pkg/boundary/dto"
 	"github.com/ganyariya/itddd_go/pkg/boundary/irepository"
+	"github.com/ganyariya/itddd_go/pkg/domain/collection"
 	"github.com/ganyariya/itddd_go/pkg/domain/factory"
 	"github.com/ganyariya/itddd_go/pkg/domain/service"
+	"github.com/ganyariya/itddd_go/pkg/domain/specification"
 	"github.com/ganyariya/itddd_go/pkg/domain/value"
 )
 
@@ -71,6 +73,25 @@ func (cas *CircleApplicationService) Join(command *command.CircleJoinCommand) (*
 	circle, err := cas.circleRepository.FindByCircleId(circleId)
 	if err != nil {
 		return nil, err
+	}
+
+	owner, err := cas.userRepository.Find(circle.OwnerId)
+	if err != nil {
+		return nil, err
+	}
+	members, err := cas.userRepository.FindByIds(circle.MemberIds)
+	if err != nil {
+		return nil, err
+	}
+
+	circleMembers := collection.NewCircleMembers(circleId, owner, members)
+	circleFullSpec := specification.NewCircleFullSpecification()
+	satisfied, err := circleFullSpec.IsSatisfiedBy(circleMembers)
+	if err != nil {
+		return nil, err
+	}
+	if satisfied {
+		return nil, fmt.Errorf("already full")
 	}
 
 	err = circle.JoinUser(userId)

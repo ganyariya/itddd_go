@@ -6,7 +6,7 @@ import (
 )
 
 type IUserFactory interface {
-	Create(userName string) (*entity.User, error)
+	Create(userName string, isPremium bool) (*entity.User, error)
 }
 
 /*
@@ -24,11 +24,11 @@ func NewUserFactory() IUserFactory {
 	return &UserFactory{}
 }
 
-func (uf *UserFactory) Create(userName string) (*entity.User, error) {
+func (uf *UserFactory) Create(userName string, isPremium bool) (*entity.User, error) {
 	userId, err := value.NewUserId()
 	if err != nil {
 		return nil, err
 	}
-	user := entity.NewUser(userId, userName)
+	user := entity.NewUser(userId, userName, isPremium)
 	return user, nil
 }

@@ -42,6 +42,17 @@ func (u *UserStubRepository) FindByName(name string) (*entity.User, error) {
 	}
 	return nil, fmt.Errorf("not found")
 }
+func (u *UserStubRepository) FindByIds(userIds []value.UserId) ([]*entity.User, error) {
+	ret := []*entity.User{}
+	for _, user := range u.users {
+		for _, userId := range userIds {
+			if user.Id == userId {
+				ret = append(ret, user)
+			}
+		}
+	}
+	return ret, nil
+}
 func (u *UserStubRepository) FindAll() ([]*entity.User, error) {
 	return u.users, nil
 }
