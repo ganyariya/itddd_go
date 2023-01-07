@@ -1,16 +1,14 @@
 package specification
 
 import (
-	"github.com/ganyariya/itddd_go/pkg/boundary/irepository"
-	"github.com/ganyariya/itddd_go/pkg/domain/entity"
+	"github.com/ganyariya/itddd_go/pkg/domain/collection"
 )
 
 type CircleFullSpecification struct {
-	userRepository irepository.IUserRepository
 }
 
-func NewCircleFullSpecification(userRepository irepository.IUserRepository) *CircleFullSpecification {
-	return &CircleFullSpecification{userRepository: userRepository}
+func NewCircleFullSpecification() *CircleFullSpecification {
+	return &CircleFullSpecification{}
 }
 
 /*
@@ -19,22 +17,12 @@ func NewCircleFullSpecification(userRepository irepository.IUserRepository) *Cir
 Circle Entity 内で JoinUser(user User, spec CircleFullSpecification) のようにしたいが循環 import になってしまう
 サークルが満員か判定する仕様
 */
-func (cfs *CircleFullSpecification) IsSatisfiedBy(circle *entity.Circle) (bool, error) {
-	users, err := cfs.userRepository.FindByIds(circle.MemberIds)
-	if err != nil {
-		return false, err
-	}
-
-	premiumCount := 0
-	for _, u := range users {
-		if u.IsPremium {
-			premiumCount++
-		}
-	}
+func (cfs *CircleFullSpecification) IsSatisfiedBy(circleMembers *collection.CircleMembers) (bool, error) {
+	premiumCount := circleMembers.CountPremiumMembers()
 
 	upper := 30
 	if premiumCount >= 10 {
 		upper = 50
 	}
-	return circle.IsFull(upper), nil
+	return circleMembers.CountMembers() >= upper, nil
 }
